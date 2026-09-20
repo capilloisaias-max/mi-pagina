@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+const base = import.meta.env.BASE_URL;
 
 function App() {
   const [entrando, setEntrando] = useState(false);
@@ -32,7 +33,7 @@ function App() {
 
       <audio
         id="background-music"
-        src="/musica.mp3"
+        src={`${base}musica.mp3`}
         loop
         preload="auto"
       />
@@ -106,7 +107,7 @@ function App() {
         <a href="/" className="brand">
 
           <img
-            src="/logo.png"
+            src={`${base}logo.png`}
             alt="Junior"
             className="brand-logo"
           />
@@ -180,7 +181,7 @@ function App() {
             <div className="logo-aura"></div>
 
             <img
-              src="/logo-grande.png"
+              src={`${base}logo-grande.png`}
               alt="Logo Junior"
               className="hero-logo"
             />
@@ -374,7 +375,7 @@ function App() {
               <div className="creation-image">
 
                 <img
-                  src="/creaciones/para-sayu.jpg"
+                  src={`${base}creaciones/para-sayu.jpg`}
                   alt="Para sayu"
                 />
 
@@ -439,7 +440,7 @@ function App() {
               <div className="creation-image">
 
                 <img
-                  src="/creaciones/creacion-2.jpg"
+                  src={`${base}creaciones/creacion-2.jpg`}
                   alt="Contáctame"
                 />
 
@@ -503,7 +504,7 @@ function App() {
   <div className="creation-image">
 
     <img
-      src="/creaciones/creacion-3.jpg"
+      src={`${base}creaciones/creacion-3.jpg`}
       alt="Contáctame"
     />
 
@@ -567,7 +568,7 @@ function App() {
   <div className="creation-image">
 
     <img
-      src="/creaciones/creacion-4.jpg"
+      src={`${base}creaciones/creacion-4.jpg`}
       alt="Contáctame"
     />
 
@@ -638,7 +639,7 @@ function App() {
             <div className="footer-brand">
 
               <img
-                src="/logo.png"
+                src={`${base}logo.png`}
                 alt="Junior"
               />
 
