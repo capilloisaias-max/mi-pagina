@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+
 const base = import.meta.env.BASE_URL;
 
 function App() {
   const [entrando, setEntrando] = useState(false);
   const [mostrarEntrada, setMostrarEntrada] = useState(true);
+  const audioRef = useRef(null);
 
-  const entrar = () => {
-    const audio = document.getElementById("background-music");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      document.body.classList.add("page-ready");
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const entrar = async () => {
+    const audio = audioRef.current;
 
     if (audio) {
-      audio.volume = 1;
-
-      audio.play().catch((error) => {
-        console.log("No se pudo iniciar la música:", error);
-      });
+      try {
+        audio.volume = 0.65;
+        await audio.play();
+      } catch (error) {
+        console.log("La reproducción automática fue bloqueada:", error);
+      }
     }
 
     setEntrando(true);
@@ -25,104 +36,152 @@ function App() {
   };
 
   return (
-    <div className="site">
+    <div className="site" id="top">
 
       {/* =====================================================
           MÚSICA
       ===================================================== */}
 
       <audio
+        ref={audioRef}
         id="background-music"
         src={`${base}musica.mp3`}
         loop
-        preload="auto"
+        preload="metadata"
       />
 
       {/* =====================================================
-          PANTALLA INICIAL
+          PANTALLA DE ENTRADA
       ===================================================== */}
 
       {mostrarEntrada && (
-        <div className={`intro-screen ${entrando ? "intro-exit" : ""}`}>
+        <div
+          className={`intro-screen ${
+            entrando ? "intro-exit" : ""
+          }`}
+          aria-label="Pantalla de bienvenida"
+        >
+          <div className="intro-noise" />
 
-          <div className="intro-background-glow intro-glow-one"></div>
-          <div className="intro-background-glow intro-glow-two"></div>
+          <div className="intro-grid" />
 
-          <div className="intro-grid"></div>
+          <div className="intro-background-glow intro-glow-one" />
+          <div className="intro-background-glow intro-glow-two" />
+
+          <div className="intro-light-line intro-light-line-one" />
+          <div className="intro-light-line intro-light-line-two" />
 
           <div className="intro-content">
 
-            {/* CÍRCULO ANIMADO */}
+            <div className="intro-overline">
+              <span />
+              DIGITAL EXPERIENCE
+              <span />
+            </div>
+
+            {/* ORBE */}
 
             <div className="loading-orb">
 
-              <div className="orb-ring ring-one"></div>
+              <div className="orb-halo halo-one" />
+              <div className="orb-halo halo-two" />
 
-              <div className="orb-ring ring-two"></div>
+              <div className="orb-ring ring-one" />
+              <div className="orb-ring ring-two" />
+              <div className="orb-ring ring-three" />
 
-              <div className="orb-ring ring-three"></div>
+              <div className="orb-energy energy-one" />
+              <div className="orb-energy energy-two" />
 
-              <div className="orb-core"></div>
+              <div className="orb-core">
+                <div className="orb-core-inner" />
+              </div>
 
-              <div className="orb-particle particle-one"></div>
-              <div className="orb-particle particle-two"></div>
-              <div className="orb-particle particle-three"></div>
+              <div className="orb-particle particle-one" />
+              <div className="orb-particle particle-two" />
+              <div className="orb-particle particle-three" />
+              <div className="orb-particle particle-four" />
+              <div className="orb-particle particle-five" />
 
             </div>
 
-            {/* BOTÓN */}
+            <div className="intro-brand">
+              <strong>JUNIOR</strong>
+              <span>CREATIVE DIGITAL SPACE</span>
+            </div>
 
             <button
+              type="button"
               className="enter-button"
               onClick={entrar}
+              aria-label="Entrar al portafolio"
             >
-              <span>
-                CONTINUAR
-              </span>
+              <span>CONTINUAR</span>
 
-              <div className="enter-arrow">
+              <span className="enter-arrow">
                 →
-              </div>
+              </span>
             </button>
 
-          </div>
+            <div className="intro-footer">
+              <span>DESIGN</span>
+              <i />
+              <span>CODE</span>
+              <i />
+              <span>CREATE</span>
+            </div>
 
+          </div>
         </div>
       )}
 
       {/* =====================================================
-          FONDO
+          FONDO PRINCIPAL
       ===================================================== */}
 
-      <div className="background-glow glow-one"></div>
-      <div className="background-glow glow-two"></div>
-      <div className="background-grid"></div>
+      <div className="background-glow glow-one" />
+      <div className="background-glow glow-two" />
+
+      <div className="background-grid" />
+
+      <div className="ambient-light ambient-one" />
+      <div className="ambient-light ambient-two" />
 
       {/* =====================================================
-          LOGO SUPERIOR
+          HEADER
       ===================================================== */}
 
       <header className="top-header">
 
-        <a href="/" className="brand">
-
+        <a
+          href="#top"
+          className="brand"
+          aria-label="Volver al inicio"
+        >
           <img
             src={`${base}logo.png`}
             alt="Junior"
             className="brand-logo"
+            width="35"
+            height="35"
+            fetchPriority="high"
           />
 
           <span className="brand-name">
             JUNIOR
           </span>
-
         </a>
 
-        <div className="header-line"></div>
+        <div className="header-line" />
 
         <span className="header-status">
           DIGITAL CREATOR
         </span>
+
+        <div className="header-indicator">
+          <span />
+          AVAILABLE
+        </div>
 
       </header>
 
@@ -137,15 +196,26 @@ function App() {
           <div className="hero-left">
 
             <div className="eyebrow">
-              <span className="status-dot"></span>
+              <span className="status-dot" />
               MI ESPACIO DIGITAL
             </div>
 
-            <h1>
-              <span>Junior dev.</span>
-            </h1>
+            <div className="hero-title-wrap">
 
-            <div className="hero-divider"></div>
+              <span className="hero-small-label">
+                PORTFOLIO / 2026
+              </span>
+
+              <h1>
+                <span>Junior</span>
+                <em>dev.</em>
+              </h1>
+
+            </div>
+
+            <div className="hero-divider">
+              <span />
+            </div>
 
             <p className="hero-description">
               Creo experiencias digitales y desarrollo proyectos
@@ -157,11 +227,11 @@ function App() {
 
               <span>DISEÑO</span>
 
-              <span className="meta-dot"></span>
+              <span className="meta-dot" />
 
               <span>DESARROLLO</span>
 
-              <span className="meta-dot"></span>
+              <span className="meta-dot" />
 
               <span>EXPERIENCIAS DIGITALES</span>
 
@@ -175,16 +245,36 @@ function App() {
               01
             </div>
 
-            <div className="hero-orbit orbit-one"></div>
-            <div className="hero-orbit orbit-two"></div>
+            <div className="hero-cross cross-one" />
+            <div className="hero-cross cross-two" />
 
-            <div className="logo-aura"></div>
+            <div className="hero-orbit orbit-one" />
+            <div className="hero-orbit orbit-two" />
 
-            <img
-              src={`${base}logo-grande.png`}
-              alt="Logo Junior"
-              className="hero-logo"
-            />
+            <div className="logo-aura" />
+
+            <div className="logo-frame">
+
+              <div className="frame-corner corner-one" />
+              <div className="frame-corner corner-two" />
+              <div className="frame-corner corner-three" />
+              <div className="frame-corner corner-four" />
+
+              <img
+                src={`${base}logo-grande.png`}
+                alt="Logo Junior"
+                className="hero-logo"
+                width="330"
+                height="330"
+              />
+
+            </div>
+
+            <div className="hero-caption">
+              <span>JUNIOR</span>
+              <i />
+              <span>DIGITAL CREATOR</span>
+            </div>
 
           </div>
 
@@ -227,12 +317,14 @@ function App() {
               href="https://www.instagram.com/juniorx_dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="social-card"
+              className="social-card instagram-card"
             >
+
+              <div className="social-card-glow" />
 
               <div className="social-icon">
 
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
 
                   <rect
                     x="3"
@@ -268,6 +360,10 @@ function App() {
                   @juniorx_dev
                 </strong>
 
+                <small>
+                  Ver perfil
+                </small>
+
               </div>
 
               <span className="social-arrow">
@@ -282,12 +378,14 @@ function App() {
               href="https://wa.me/51955226777"
               target="_blank"
               rel="noopener noreferrer"
-              className="social-card"
+              className="social-card whatsapp-card"
             >
+
+              <div className="social-card-glow" />
 
               <div className="social-icon">
 
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
 
                   <path
                     d="M20.5 11.5a8.5 8.5 0 0 1-12.7 7.4L4 20l1.2-3.6A8.5 8.5 0 1 1 20.5 11.5Z"
@@ -310,6 +408,10 @@ function App() {
                 <strong>
                   Escríbeme directamente
                 </strong>
+
+                <small>
+                  Contactar ahora
+                </small>
 
               </div>
 
@@ -351,7 +453,8 @@ function App() {
                 </h2>
 
                 <p className="section-description">
-                  Algunas experiencias digitales que he creado.
+                  Una selección de experiencias digitales
+                  creadas con diseño, código y creatividad.
                 </p>
 
               </div>
@@ -359,7 +462,7 @@ function App() {
             </div>
 
             <div className="section-count">
-              04 PROYECTOS
+              02 PROYECTOS
             </div>
 
           </div>
@@ -370,16 +473,34 @@ function App() {
                 PROYECTO 01
             ================================================= */}
 
-            <article className="creation-card">
+            <article className="creation-card project-sayu">
+
+              <div className="creation-card-top">
+
+                <span>
+                  PROJECT / 01
+                </span>
+
+                <span>
+                  2026
+                </span>
+
+              </div>
 
               <div className="creation-image">
 
                 <img
                   src={`${base}creaciones/para-sayu.jpg`}
-                  alt="Para sayu"
+                  alt="Proyecto Para Sayu"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="600"
                 />
 
-                <div className="image-shade"></div>
+                <div className="image-shade" />
+
+                <div className="image-glow" />
 
                 <span className="creation-index">
                   01
@@ -387,6 +508,10 @@ function App() {
 
                 <span className="image-label">
                   EXPERIENCIA DIGITAL
+                </span>
+
+                <span className="image-status">
+                  ● ONLINE
                 </span>
 
               </div>
@@ -404,8 +529,8 @@ function App() {
                   </h3>
 
                   <p>
-                    Dedicatoria personalisable para tu
-                    persona favorita , parejas , amigos ,etc.
+                    Dedicatoria personalizable para tu
+                    persona favorita, parejas, amigos, etc.
                   </p>
 
                 </div>
@@ -432,19 +557,37 @@ function App() {
             </article>
 
             {/* =================================================
-                CONTACTO 02
+                PROYECTO 02
             ================================================= */}
 
-            <article className="creation-card contact-card">
+            <article className="creation-card project-bot">
+
+              <div className="creation-card-top">
+
+                <span>
+                  PROJECT / 02
+                </span>
+
+                <span>
+                  2026
+                </span>
+
+              </div>
 
               <div className="creation-image">
 
                 <img
-                  src={`${base}creaciones/creacion-2.jpg`}
-                  alt="Contáctame"
+                  src={`${base}creaciones/creacion-3.jpg`}
+                  alt="Bot Junior Pro"
+                  loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="600"
                 />
 
-                <div className="image-shade"></div>
+                <div className="image-shade" />
+
+                <div className="image-glow" />
 
                 <span className="creation-index">
                   02
@@ -454,6 +597,10 @@ function App() {
                   SERVICIO DIGITAL
                 </span>
 
+                <span className="image-status">
+                  ● ACTIVE
+                </span>
+
               </div>
 
               <div className="creation-content">
@@ -461,16 +608,16 @@ function App() {
                 <div className="creation-heading">
 
                   <span className="creation-category">
-                    ESPIONAJE
+                    SERVICIO
                   </span>
 
                   <h3>
-                    Podrás obtener toda la galería de su dispositivo.
+                    BOT JUNIOR PRO ADMINISTRA
                   </h3>
 
                   <p>
-                    ¿Quieres obtener fotos y videos de la galería de tu amiga , novio sin que se entere ?
-                    Escríbeme directamente por WhatsApp.
+                    Administra tu grupo de WhatsApp con
+                    Bot Junior Pro mediante comandos.
                   </p>
 
                 </div>
@@ -495,134 +642,6 @@ function App() {
               </div>
 
             </article>
-            {/* =================================================
-    CONTACTO 03
-================================================= */}
-
-<article className="creation-card contact-card">
-
-  <div className="creation-image">
-
-    <img
-      src={`${base}creaciones/creacion-3.jpg`}
-      alt="Contáctame"
-    />
-
-    <div className="image-shade"></div>
-
-    <span className="creation-index">
-      03
-    </span>
-
-    <span className="image-label">
-      SERVICIO DIGITAL
-    </span>
-
-  </div>
-
-  <div className="creation-content">
-
-    <div className="creation-heading">
-
-      <span className="creation-category">
-        SERVICIO
-      </span>
-
-      <h3>
-        BOT JUNIOR PRO ADMINISTRA
-      </h3>
-
-      <p>
-        Administra tu grupo de WhatsApp con
-        bot junior pro con tan solo comandos.
-      </p>
-
-    </div>
-
-    <a
-      href="https://wa.me/51955226777"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="creation-button"
-    >
-
-      <span>
-        Contáctame
-      </span>
-
-      <span className="button-arrow">
-        ↗
-      </span>
-
-    </a>
-
-  </div>
-
-</article>
-{/* =================================================
-    CONTACTO 04
-================================================= */}
-
-<article className="creation-card contact-card">
-
-  <div className="creation-image">
-
-    <img
-      src={`${base}creaciones/creacion-4.jpg`}
-      alt="Contáctame"
-    />
-
-    <div className="image-shade"></div>
-
-    <span className="creation-index">
-      04
-    </span>
-
-    <span className="image-label">
-      SERVICIO DIGITAL
-    </span>
-
-  </div>
-
-  <div className="creation-content">
-
-    <div className="creation-heading">
-
-      <span className="creation-category">
-        SERVICIO
-      </span>
-
-      <h3>
-        CAPTURA FOTO EN TIEMPO REAL
-      </h3>
-
-      <p>
-        Quieres obtener foto de su rostro de alguien en tiempo real?
-        esto es posible mediante mi enlace que te brindare para mas informacion contactame
-      </p>
-
-    </div>
-
-    <a
-      href="https://wa.me/51955226777"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="creation-button"
-    >
-
-      <span>
-        Contáctame
-      </span>
-
-      <span className="button-arrow">
-        ↗
-      </span>
-
-    </a>
-
-  </div>
-
-</article>
 
           </div>
 
@@ -636,11 +655,17 @@ function App() {
 
           <div className="footer-main">
 
-            <div className="footer-brand">
+            <a
+              href="#top"
+              className="footer-brand"
+            >
 
               <img
                 src={`${base}logo.png`}
                 alt="Junior"
+                width="34"
+                height="34"
+                loading="lazy"
               />
 
               <div>
@@ -655,7 +680,7 @@ function App() {
 
               </div>
 
-            </div>
+            </a>
 
             <div className="footer-socials">
 
